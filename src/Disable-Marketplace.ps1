@@ -25,7 +25,7 @@ Function WriteLog {
     }
 }
 
-WriteLog "STARTED: Disable-Marketplace.ps1."
+WriteLog "INFO: Started Disable-Marketplace.ps1."
 
 $SettingsFile = $env:USERPROFILE + "\AppData\Roaming\UiPath\agent-settings.json"
 Try {    
@@ -36,14 +36,13 @@ Try {
 }
 
 $Match = '    "agent": {'
-$Add = @()
-$Add += '		"defaultNugetWidgetConfig": {'
-$Add += '			"widgets": {},'
-$Add += '			"enableOldWidgets": true,'
-$Add += '			"enableFallbackFeed": true,'
-$Add += '			"expires": "2100-01-01T00:00:00.000Z",'
-$Add += '			"policy": "Assistant with Marketplace tab disabled."'
-$Add += '		},'
+$Add += '		"defaultNugetWidgetConfig": {
+			"widgets": {},
+			"enableOldWidgets": true,
+			"enableFallbackFeed": true,
+			"expires": "2100-01-01T00:00:00.000Z",
+			"policy": "Assistant with Marketplace tab disabled."
+		},'
 Try {
     $Reader = [IO.File]::OpenText($SettingsFile)
     $Found = $false
@@ -60,11 +59,11 @@ Try {
         WriteLog "INFO: Found agent line in settings file."
         $Text | Where-Object { $_ } | Set-Content $SettingsFile
     } else {
-        WriteLog "ERROR: Agent line not found in settings file."
+        WriteLog -Err "ERROR: Agent line not found in settings file."
     }
 } Catch {
     WriteLog -Err "ERROR: Configuring settings file."
 }
 
-WriteLog "COMPLETED: Disable-Marketplace.ps1."
+WriteLog "INFO: Completed Disable-Marketplace.ps1."
 WriteLog "--------------------------------------------------"
